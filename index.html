@@ -21,7 +21,8 @@
         <form class="form-search" onsubmit="app.onSearchAddress(event)">
             <input type="text" name="address" placeholder="Search address" />
             <button title="Search">🔍</button>
-            <button type="button" title="My Position" onclick="app.onPanToUserPos()" class="btn-user-pos">&nbsp;
+            <button type="button" title="My Position" onclick="app.onPanToUserPos()"
+                class="btn-user-pos secondary">&nbsp;
             </button>
         </form>
     </header>
@@ -37,7 +38,8 @@
                     <div>
                         <label>
                             Min Rate:
-                            <input name="filter-by-rate" type="range" min="0" max="5" value="0" class="filter-rate-range"
+                            <input name="filter-by-rate" type="range" min="0" max="5" value="0"
+                                class="filter-rate-range"
                                 onchange="this.title=this.value;app.onSetFilterBy({minRate: this.value})" />
                         </label>
                     </div>
@@ -56,13 +58,13 @@
 
                     <dialog class="modal-location">
                         <div class="modal-content">
-                        <form action="">
-                            <h2></h2>
-                            <input type="text">
-                            <button>save</button>
-                            <button type="button" onclick="app.onCloseModal()">close</button>
-                        </form>
-                    </div>
+                            <form action="">
+                                <h2></h2>
+                                <input type="text">
+                                <button>save</button>
+                                <button type="button" onclick="app.onCloseModal()">close</button>
+                            </form>
+                        </div>
                     </dialog>
 
                 </section>
