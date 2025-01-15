@@ -8,7 +8,8 @@ export const utilService = {
     elapsedTime,
     getColors,
     updateQueryParams,
-    getDistance
+    getDistance,
+    isSameDate
 }
 
 function saveToStorage(key, value) {
@@ -117,3 +118,11 @@ function getDistance(latLng1, latLng2, unit) {
         return dist
     }
 }
+
+function isSameDate(date1, date2) {
+    return (
+      date1.getFullYear() === date2.getFullYear() &&
+      date1.getMonth() === date2.getMonth() && // getMonth() returns 0-based month
+      date1.getDate() === date2.getDate()
+    );
+  }

@@ -45,22 +45,23 @@ Here is the format of the location object:
 ## Services
 ```js
 export const locService = {
-    query,
-    getById,
-    remove,
-    save,
-    setFilterBy,
-    setSortBy,
-    getLocCountByRateMap
+  query,
+  getById,
+  remove,
+  save,
+  setFilterBy,
+  setSortBy,
+  getLocCountByRateMap,
+  getLocCountByUpdatedLastMap
 }
 
 export const mapService = {
-    initMap,
-    getPosition,
-    setMarker,
-    panTo,
-    lookupAddressGeo,
-    addClickListener
+  initMap,
+  getPosition,
+  setMarker,
+  panTo,
+  lookupAddressGeo,
+  addClickListener
 }
 ```
 
