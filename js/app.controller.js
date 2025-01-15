@@ -17,6 +17,7 @@ window.app = {
     onSetSortBy,
     onSetFilterBy,
 }
+var gUserPos
 
 function onInit() {
     getFilterByFromQueryParams()
@@ -37,12 +38,15 @@ function renderLocs(locs) {
 
     var strHTML = locs.map(loc => {
         const className = (loc.id === selectedLocId) ? 'active' : ''
+        console.log(loc.geo.lat)
+        const distance = (gUserPos) ? utilService.getDistance(gUserPos,loc.geo,'K')+ ' KM':'please enable location and click pan to location'
         return `
         <li class="loc ${className}" data-id="${loc.id}">
             <h4>  
                 <span>${loc.name}</span>
                 <span title="${loc.rate} stars">${'★'.repeat(loc.rate)}</span>
             </h4>
+            <p class="muted">Distance: ${distance} </p>
             <p class="muted">
                 Created: ${utilService.elapsedTime(loc.createdAt)}
                 ${(loc.createdAt !== loc.updatedAt) ?
@@ -132,6 +136,7 @@ function loadAndRenderLocs() {
 function onPanToUserPos() {
     mapService.getUserPosition()
         .then(latLng => {
+            gUserPos = latLng
             mapService.panTo({ ...latLng, zoom: 15 })
             unDisplayLoc()
             loadAndRenderLocs()
