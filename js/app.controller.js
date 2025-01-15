@@ -2,6 +2,12 @@ import { utilService } from './services/util.service.js'
 import { locService } from './services/loc.service.js'
 import { mapService } from './services/map.service.js'
 
+var gColors = {
+    main: '',
+    secondary: '',
+    third: '',
+}
+
 window.onload = onInit
 
 // To make things easier in this project structure 
@@ -16,6 +22,7 @@ window.app = {
     onShareLoc,
     onSetSortBy,
     onSetFilterBy,
+    onChangeColor
 }
 var gUserPos
 
@@ -39,7 +46,7 @@ function renderLocs(locs) {
     var strHTML = locs.map(loc => {
         const className = (loc.id === selectedLocId) ? 'active' : ''
         console.log(loc.geo.lat)
-        const distance = (gUserPos) ? utilService.getDistance(gUserPos,loc.geo,'K')+ ' KM':'please enable location and click pan to location'
+        const distance = (gUserPos) ? utilService.getDistance(gUserPos, loc.geo, 'K') + ' KM' : 'please enable location and click pan to location'
         return `
         <li class="loc ${className}" data-id="${loc.id}">
             <h4>  
@@ -252,7 +259,7 @@ function onSetSortBy() {
     if (!prop) return
 
     const sortBy = {
-        [prop] : (isDesc)? -1 : 1
+        [prop]: (isDesc) ? -1 : 1
     }
 
     locService.setSortBy(sortBy)
@@ -322,4 +329,12 @@ function cleanStats(stats) {
         return acc
     }, [])
     return cleanedStats
+}
+
+function onChangeColor(event) {
+    gColors[event.target.name] = event.target.value
+    const els = document.getElementsByClassName(`${event.target.name}`)
+    for (let i = 0; i < els.length; i++) {
+        els[i].style.backgroundColor = event.target.value
+    }
 }

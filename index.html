@@ -8,10 +8,10 @@
     <title>TravelTip</title>
 </head>
 
-<body>
-    <header>
+<body class="main">
+    <header class="third">
         <h1>TravelTip</h1>
-        <section class="selected-loc">
+        <section class="selected-loc secondary">
             <h2>Location: <span class="loc-name"></span> <span class="loc-rate"></span></h2>
             <h4 class="loc-address"></h4>
             <button onclick="app.onCopyLoc()">Copy location</button>
@@ -28,8 +28,8 @@
     <main>
         <div class="map"></div>
         <div>
-            <section class="locs-container">
-                <section class="loc-filter">
+            <section class="locs-container secondary">
+                <section class="loc-filter main">
                     <div>
                         <input name="filter-by-txt" type="text" placeholder="Search location"
                             oninput="app.onSetFilterBy({txt: this.value})" />
@@ -81,6 +81,16 @@
                         <ul class="legend"></ul>
                     </div>
                 </section>
+            </section>
+            <section>
+                <div class="settings">
+                    <label for="clr-1">main color:</label>
+                    <input onchange="app.onChangeColor(event)" type="color" name="main" id="clr-1">
+                    <label for="clr-2">secondary color:</label>
+                    <input onchange="app.onChangeColor(event)" type="color" name="secondary" id="clr-2">
+                    <label for="clr-3">third color:</label>
+                    <input onchange="app.onChangeColor(event)" type="color" name="third" id="clr-3">
+                </div>
             </section>
         </div>
     </main>
