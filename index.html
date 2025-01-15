@@ -58,13 +58,16 @@
 
                     <dialog class="modal-location">
                         <div class="modal-content">
-                            <form action="">
-                                <h2></h2>
-                                <input type="text">
-                                <button>save</button>
-                                <button type="button" onclick="app.onCloseModal()">close</button>
-                            </form>
-                        </div>
+                        <form method="dialog" onsubmit="app.submitModal()" >
+                            <h2></h2>
+                            <label for="location-name-input"> location name</label>
+                            <input class="location-name-input" type="text">
+                            <label for="location-rating-input"> location rating</label>
+                            <input class="location-rating-input" type="text">
+                            <button>save</button>
+                            <button type="button" onclick="app.onCloseModal()">close</button>
+                        </form>
+                    </div>
                     </dialog>
 
                 </section>

@@ -71,7 +71,7 @@ export const mapService = {
 // functions that are called from DOM are defined on a global app object
 
 window.app = {
-    onRemoveLoc,
+     onRemoveLoc,
     onUpdateLoc,
     onSelectLoc,
     onPanToUserPos,
@@ -79,7 +79,10 @@ window.app = {
     onCopyLoc,
     onShareLoc,
     onSetSortBy,
-    onSetFilterBy
+    onSetFilterBy,
+    openModal,
+    submitModal,
+    onCloseModal,
 }
 ```
 
