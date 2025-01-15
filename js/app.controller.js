@@ -22,14 +22,17 @@ window.app = {
     onShareLoc,
     onSetSortBy,
     onSetFilterBy,
+    onAddLoc,
     openModal,
     submitModal,
     onCloseModal,
     onChangeColor
 }
+
 var gUserPos
 var gLocationToAdd
 var gLocationToEdit
+
 function onInit() {
     getFilterByFromQueryParams()
     loadAndRenderLocs()
@@ -114,14 +117,13 @@ function onSearchAddress(ev) {
         })
 }
 
-function onAddLoc(geo,name,rate) {
-   
-
+function onAddLoc(geo, name, rate) {
     const loc = {
         name,
         rate,
         geo
     }
+
     locService.save(loc)
         .then((savedLoc) => {
             flashMsg(`Added Location (id: ${savedLoc.id})`)
@@ -158,23 +160,20 @@ function onPanToUserPos() {
         })
 }
 
-function onUpdateLoc(name,rating,locId) {
-
-
+function onUpdateLoc(name, rating, locId) {
     locService.getById(locId)
         .then(loc => {
-                loc.rate = rating
-                loc.name = name
-                locService.save(loc)
-                    .then(savedLoc => {
-                        flashMsg(`Rate was set to: ${savedLoc.rate}`)
-                        loadAndRenderLocs()
-                    })
-                    .catch(err => {
-                        console.error('OOPs:', err)
-                        flashMsg('Cannot update location')
-                    })
-            
+            loc.rate = rating
+            loc.name = name
+            locService.save(loc)
+                .then(savedLoc => {
+                    flashMsg(`Rate was set to: ${savedLoc.rate}`)
+                    loadAndRenderLocs()
+                })
+                .catch(err => {
+                    console.error('OOPs:', err)
+                    flashMsg('Cannot update location')
+                })
         })
 }
 
@@ -332,4 +331,46 @@ function cleanStats(stats) {
         return acc
     }, [])
     return cleanedStats
+}
+
+function openModal(data) {
+    document.querySelector('.modal-location').show()
+    if (typeof data === 'string') {
+        gLocationToEdit = data
+        locService.getById(data)
+            .then(loc => {
+                document.querySelector('.location-name-input').value = loc.name
+                document.querySelector('.location-rating-input').value = loc.rate
+            })
+    } else {
+        document.querySelector('.location-name-input').value = data.address || 'Just a place'
+        document.querySelector('.location-rating-input').value = 3
+        gLocationToAdd = data
+    }
+}
+
+function submitModal() {
+    const name = document.querySelector('.location-name-input').value
+    const rating = document.querySelector('.location-rating-input').value
+    if (gLocationToAdd) {
+        onAddLoc(gLocationToAdd, name, rating)
+        gLocationToAdd = undefined
+    } else {
+        onUpdateLoc(name, rating, gLocationToEdit)
+        gLocationToEdit = undefined
+    }
+}
+
+function onCloseModal() {
+    document.querySelector('.modal-location').close()
+    gLocationToAdd = undefined
+    gLocationToEdit = undefined
+}
+
+function onChangeColor(event) {
+    gColors[event.target.name] = event.target.value
+    const els = document.getElementsByClassName(`${event.target.name}`)
+    for (let i = 0; i < els.length; i++) {
+        els[i].style.backgroundColor = event.target.value
+    }
 }
