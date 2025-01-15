@@ -69,16 +69,21 @@ function renderLocs(locs) {
 }
 
 function onRemoveLoc(locId) {
-    locService.remove(locId)
-        .then(() => {
-            flashMsg('Location removed')
-            unDisplayLoc()
-            loadAndRenderLocs()
-        })
-        .catch(err => {
-            console.error('OOPs:', err)
-            flashMsg('Cannot remove location')
-        })
+    const removedConfirmed = confirm('Are you sure you want to remove this location?')
+    if (removedConfirmed) {
+        locService.remove(locId)
+            .then(() => {
+                flashMsg('Location removed')
+                unDisplayLoc()
+                loadAndRenderLocs()
+            })
+            .catch(err => {
+                console.error('OOPS:', err)
+                flashMsg('Cannot remove location')
+            })
+    } else {
+        alert('Removed action was canceled')
+    }
 }
 
 function onSearchAddress(ev) {
@@ -223,7 +228,7 @@ function getFilterByFromQueryParams() {
     const queryParams = new URLSearchParams(window.location.search)
     const txt = queryParams.get('txt') || ''
     const minRate = queryParams.get('minRate') || 0
-    locService.setFilterBy({txt, minRate})
+    locService.setFilterBy({ txt, minRate })
 
     document.querySelector('input[name="filter-by-txt"]').value = txt
     document.querySelector('input[name="filter-by-rate"]').value = minRate
