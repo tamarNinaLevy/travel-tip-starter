@@ -119,7 +119,7 @@ function onAddLoc(geo) {
             loadAndRenderLocs()
         })
         .catch(err => {
-            console.error('OOPs:', err)
+            console.error('OOPS:', err)
             flashMsg('Cannot add location')
         })
 }
@@ -128,7 +128,7 @@ function loadAndRenderLocs() {
     locService.query()
         .then(renderLocs)
         .catch(err => {
-            console.error('OOPs:', err)
+            console.error('OOPS:', err)
             flashMsg('Cannot load locations')
         })
 }
@@ -251,13 +251,9 @@ function onSetSortBy() {
 
     if (!prop) return
 
-    const sortBy = {}
-    sortBy[prop] = (isDesc) ? -1 : 1
-
-    // Shorter Syntax:
-    // const sortBy = {
-    //     [prop] : (isDesc)? -1 : 1
-    // }
+    const sortBy = {
+        [prop] : (isDesc)? -1 : 1
+    }
 
     locService.setSortBy(sortBy)
     loadAndRenderLocs()
