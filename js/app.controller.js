@@ -16,16 +16,20 @@ window.app = {
     onShareLoc,
     onSetSortBy,
     onSetFilterBy,
+    openModal,
+    submitModal,
+    onCloseModal,
 }
 var gUserPos
-
+var gLocationToAdd
+var gLocationToEdit
 function onInit() {
     getFilterByFromQueryParams()
     loadAndRenderLocs()
     mapService.initMap()
         .then(() => {
             // onPanToTokyo()
-            mapService.addClickListener(onAddLoc)
+            mapService.addClickListener(openModal)
         })
         .catch(err => {
             console.error('OOPs:', err)
@@ -55,7 +59,7 @@ function renderLocs(locs) {
             </p>
             <div class="loc-btns">     
                <button title="Delete" onclick="app.onRemoveLoc('${loc.id}')">🗑️</button>
-               <button title="Edit" onclick="app.onUpdateLoc('${loc.id}')">✏️</button>
+               <button title="Edit" onclick="app.openModal('${loc.id}')">✏️</button>
                <button title="Select" onclick="app.onSelectLoc('${loc.id}')">🗺️</button>
             </div>     
         </li>`}).join('')
@@ -103,13 +107,12 @@ function onSearchAddress(ev) {
         })
 }
 
-function onAddLoc(geo) {
-    const locName = prompt('Loc name', geo.address || 'Just a place')
-    if (!locName) return
+function onAddLoc(geo,name,rate) {
+   
 
     const loc = {
-        name: locName,
-        rate: +prompt(`Rate (1-5)`, '3'),
+        name,
+        rate,
         geo
     }
     locService.save(loc)
@@ -148,12 +151,13 @@ function onPanToUserPos() {
         })
 }
 
-function onUpdateLoc(locId) {
+function onUpdateLoc(name,rating,locId) {
+
+
     locService.getById(locId)
         .then(loc => {
-            const rate = prompt('New rate?', loc.rate)
-            if (rate && rate !== loc.rate) {
-                loc.rate = rate
+                loc.rate = rating
+                loc.name = name
                 locService.save(loc)
                     .then(savedLoc => {
                         flashMsg(`Rate was set to: ${savedLoc.rate}`)
@@ -163,8 +167,7 @@ function onUpdateLoc(locId) {
                         console.error('OOPs:', err)
                         flashMsg('Cannot update location')
                     })
-
-            }
+            
         })
 }
 
@@ -322,4 +325,40 @@ function cleanStats(stats) {
         return acc
     }, [])
     return cleanedStats
+}
+
+
+function openModal(data){
+    
+    document.querySelector('.modal-location').show()
+    if(typeof data ==='string'){
+        gLocationToEdit = data
+        locService.getById(data)
+                            .then(loc =>{
+                                        document.querySelector('.location-name-input').value = loc.name
+                                        document.querySelector('.location-rating-input').value  = loc.rate  
+                                           })                                                                 
+    } else{
+        document.querySelector('.location-name-input').value = data.address || 'Just a place'
+        document.querySelector('.location-rating-input').value = 3
+        gLocationToAdd  = data
+    }
+    
+}
+
+function submitModal(){
+    const name = document.querySelector('.location-name-input').value
+    const rating = document.querySelector('.location-rating-input').value
+    if(gLocationToAdd){
+        onAddLoc(gLocationToAdd,name,rating)
+        gLocationToAdd = undefined
+    }else{
+        onUpdateLoc(name,rating,gLocationToEdit)
+        gLocationToEdit = undefined
+    }
+}
+function onCloseModal(){
+    document.querySelector('.modal-location').close()
+    gLocationToAdd = undefined
+    gLocationToEdit = undefined
 }
